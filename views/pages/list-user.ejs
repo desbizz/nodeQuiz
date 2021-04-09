@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    
+</head>
+<body class="container">
+
+<header>
+    <%- include('../partials/header'); %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <h1>User List</h1>
+       
+    </div> 
+    <div id="list"> </div>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <select id="sortTable" onchange="sortTable()">
+      <option value="Username">Username</option>
+      <option value="Email">Email</option>
+      <option value="State">State</option>
+      <option value="Country">Country</option>
+    </select>
+    <table class="table" id="data">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">State</th>
+            <th scope="col">Country</th>
+          </tr>
+        </thead>
+        <tbody>
+           
+          <% var test = data %>
+     
+            <% for (var x=0; x<data.length; x++) { %>
+          <tr> 
+             <td> <%= data[x].username  %> </td>
+             <td> <%= data[x].email  %> </td>
+             <td> <%= data[x].state  %> </td>
+             <td> <%= data[x].country  %> </td>
+           
+            </tr>
+ 
+
+           <% } %>
+          
+        
+       
+        </tbody>
+      </table>
+    <nav>
+        <ul class="pagination">
+        <li class="page-item"
+        
+        <% if(page <= 0) { %>
+        class="disabled"
+        <% } %>
+><a class="page-link" id="prev" >&laquo;</a></li>
+<% for(var i = 0; i < pages; i++) { %>
+<li class="page-item"
+        <% if(page == i) { %>
+        class="active"
+        <% } %>
+><a class="page-link" id="current" ><%= i + 1 %></a></li>
+<% } %>
+<li class="page-item"
+ <% if(page > pages - 1) { %>class="disabled"
+        <% } %>
+><a class="page-link" id="next">&raquo;</a></li>
+</ul>    
+</nav>
+
+</main>
+
+<footer>
+  <script>
+  function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("data");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+  //var test is now assigned to getTest which will only work on browsers
+  function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch,txtValue,sortCol;
+  
+  table = document.getElementById("data");
+  txtValue = document.getElementById("sortTable").value;
+  if(txtValue == 'Username')
+  sortCol=0
+  if(txtValue == 'Email')
+  sortCol=1
+  if(txtValue == 'State')
+  sortCol=2
+  if(txtValue == 'Country')
+  sortCol=3
+  console.log(txtValue)
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[sortCol];
+      y = rows[i + 1].getElementsByTagName("TD")[sortCol];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+$(document).ready(function(){
+        $('#data').after('<div id="nav"></div>');
+        var rowsShown = 4;
+        var rowsTotal = $('#data tbody tr').length;
+        var numPages = rowsTotal/rowsShown;
+        for(i = 0;i < numPages;i++) {
+            var pageNum = i + 1;
+            $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+        }
+        $('#data tbody tr').hide();
+        $('#data tbody tr').slice(0, rowsShown).show();
+        $('#nav a:first').addClass('active');
+        $('#nav a').bind('click', function(){
+
+            $('#nav a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#data tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+                    css('display','table-row').animate({opacity:1}, 300);
+        });
+    });
+  </script>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
+

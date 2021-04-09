@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+    <%- include('../partials/header'); %>
+</header>
+
+<main>
+    <div class="jumbotron">
+        <h1>Node Quiz</h1>
+        <p>A simple app</p>
+    </div>
+    <h1>User Login</h1>
+    <form>
+        <div class="col-lg-3">
+      <label>Username</label>
+        <input type="text" id="username" value="" class="form-control">
+        <label >Password</label>
+        <input type="text" id="password" value="" class="form-control">
+        <button>Login</button>
+        </div>
+       
+    </form>
+  
+
+</main>
+
+<footer>
+    <script src="/js/app.js"></script>
+    <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
